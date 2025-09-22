@@ -3,8 +3,6 @@ import { initializeDatabase, recordVote } from '@/lib/db';
 
 export async function POST(request: NextRequest) {
   try {
-    // Initialize database if needed
-    await initializeDatabase();
 
     const body = await request.json();
     const { winnerId, loserId } = body;

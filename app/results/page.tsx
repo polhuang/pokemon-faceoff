@@ -56,10 +56,10 @@ export default function ResultsPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen px-4 py-8">
       {/* Header */}
       <div className="text-center mb-12">
-        <h1 className="text-6xl font-bold gradient-text mb-4 pulse-glow">
+        <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-4 pulse-glow">
           Pokemon Rankings
         </h1>
         <p className="text-xl text-white/80 mb-8 font-medium">

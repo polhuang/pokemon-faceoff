@@ -10,17 +10,17 @@ export default function PokemonCard({ pokemon, onVote, showStats = false }: Poke
   const winRate = pokemon.totalVotes > 0 ? (pokemon.wins / pokemon.totalVotes) * 100 : 0;
 
   return (
-    <div className="pokemon-card p-10 md:p-12 text-center max-w-md md:max-w-lg mx-auto group cursor-pointer relative overflow-hidden">
+    <div className="pokemon-card p-6 md:p-8 text-center max-w-sm md:max-w-md mx-auto group cursor-pointer relative overflow-hidden">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-pokemon-blue/5 via-transparent to-pokemon-red/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       
       {/* Pokemon Image with floating animation */}
-      <div className="mb-4 md:mb-6 relative z-10">
+      <div className="mb-4 relative z-10">
         <div className="floating-animation">
-          <img 
-            src={pokemon.image} 
+          <img
+            src={pokemon.image}
             alt={pokemon.name}
-            className="w-32 h-32 md:w-40 md:h-40 mx-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-3xl"
+            className="w-24 h-24 md:w-32 md:h-32 mx-auto object-contain drop-shadow-2xl transition-transform duration-300 group-hover:scale-110 group-hover:drop-shadow-3xl"
           />
         </div>
         {/* Enhanced glow effect behind image */}
@@ -30,8 +30,8 @@ export default function PokemonCard({ pokemon, onVote, showStats = false }: Poke
       </div>
       
       {/* Pokemon Name with gradient text */}
-      <h3 className="text-xl md:text-2xl font-bold gradient-text mb-1 md:mb-2 relative z-10 group-hover:text-white transition-colors duration-300">{pokemon.name}</h3>
-      <p className="text-white/70 mb-3 md:mb-4 capitalize font-medium text-sm md:text-base relative z-10 group-hover:text-white/90 transition-colors duration-300">{pokemon.type}</p>
+      <h3 className="text-lg md:text-xl font-bold gradient-text mb-1 relative z-10 group-hover:text-white transition-colors duration-300">{pokemon.name}</h3>
+      <p className="text-white/70 mb-3 capitalize font-medium text-sm relative z-10 group-hover:text-white/90 transition-colors duration-300">{pokemon.type}</p>
       
       {showStats && (
         <div className="mb-6 space-y-3">
@@ -51,9 +51,9 @@ export default function PokemonCard({ pokemon, onVote, showStats = false }: Poke
       )}
       
       {/* Vote Button with enhanced styling */}
-      <button 
+      <button
         onClick={onVote}
-        className="vote-button w-full relative overflow-hidden text-sm md:text-base px-4 py-2 md:px-8 md:py-4 group-hover:shadow-glow-lg transition-all duration-300"
+        className="vote-button w-full relative overflow-hidden text-sm md:text-base px-4 py-2 md:px-6 md:py-3 group-hover:shadow-glow-lg transition-all duration-300"
       >
         <span className="relative z-10 font-semibold">Vote for {pokemon.name}</span>
         <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

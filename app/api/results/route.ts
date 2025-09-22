@@ -5,28 +5,30 @@ import { Pokemon } from '@/types/pokemon';
 
 export async function GET() {
   try {
-    // Initialize database if needed
-    await initializeDatabase();
-
     // Get ranked Pokemon from database
     const rankedVoteData = await getRankedPokemon();
 
     // Create a map for quick lookup
     const voteMap = new Map(rankedVoteData.map(vote => [vote.pokemon_id, vote]));
 
-    // Combine Pokemon data with vote stats and maintain ranking order
-    const rankedPokemon: Pokemon[] = rankedVoteData.map(voteData => {
-      const pokemon = pokemonData.find(p => p.id === voteData.pokemon_id);
-      if (!pokemon) {
-        throw new Error(`Pokemon with ID ${voteData.pokemon_id} not found`);
-      }
+    // Combine Pokemon data with vote stats - show all Pokemon, even with 0 votes
+    const rankedPokemon: Pokemon[] = pokemonData.map(pokemon => {
+      const voteData = voteMap.get(pokemon.id);
 
       return {
         ...pokemon,
-        wins: voteData.wins,
-        losses: voteData.losses,
-        totalVotes: voteData.total_votes
+        wins: voteData?.wins || 0,
+        losses: voteData?.losses || 0,
+        totalVotes: voteData?.total_votes || 0
       };
+    }).sort((a, b) => {
+      // Sort by win rate, then by total votes, then by ID
+      const aWinRate = a.totalVotes > 0 ? (a.wins / a.totalVotes) * 100 : 0;
+      const bWinRate = b.totalVotes > 0 ? (b.wins / b.totalVotes) * 100 : 0;
+
+      if (aWinRate !== bWinRate) return bWinRate - aWinRate;
+      if (a.totalVotes !== b.totalVotes) return b.totalVotes - a.totalVotes;
+      return a.id - b.id;
     });
 
     return NextResponse.json({
