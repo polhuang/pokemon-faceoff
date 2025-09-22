@@ -1,0 +1,17 @@
+{
+  "regions": ["all"],
+  "functions": {
+    "app/api/**": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "POSTGRES_URL": "@pokemon-faceoff-postgres-url",
+    "POSTGRES_PRISMA_URL": "@pokemon-faceoff-postgres-prisma-url",
+    "POSTGRES_URL_NON_POOLING": "@pokemon-faceoff-postgres-url-non-pooling",
+    "POSTGRES_USER": "@pokemon-faceoff-postgres-user",
+    "POSTGRES_HOST": "@pokemon-faceoff-postgres-host",
+    "POSTGRES_PASSWORD": "@pokemon-faceoff-postgres-password",
+    "POSTGRES_DATABASE": "@pokemon-faceoff-postgres-database"
+  }
+}
