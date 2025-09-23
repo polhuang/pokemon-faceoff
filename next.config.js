@@ -8,7 +8,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'https://us.i.posthog.com',
+            value: 'https://us.i.posthog.com, https://us-assets.i.posthog.com',
           },
           {
             key: 'Access-Control-Allow-Methods',
