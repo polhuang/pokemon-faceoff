@@ -88,33 +88,31 @@ export async function getAllVoteData(): Promise<VoteRecord[]> {
 // Record a vote
 export async function recordVote(winnerId: number, loserId: number): Promise<void> {
   try {
-    // Update winner (use UPSERT to handle missing records)
-    await sql`
-      INSERT INTO pokemon_votes (pokemon_id, wins, losses, total_votes, updated_at)
-      VALUES (${winnerId}, 1, 0, 1, CURRENT_TIMESTAMP)
-      ON CONFLICT (pokemon_id) DO UPDATE SET
-        wins = pokemon_votes.wins + 1,
-        total_votes = pokemon_votes.total_votes + 1,
-        updated_at = CURRENT_TIMESTAMP
-    `;
-
-    // Update loser (use UPSERT to handle missing records)
-    await sql`
-      INSERT INTO pokemon_votes (pokemon_id, wins, losses, total_votes, updated_at)
-      VALUES (${loserId}, 0, 1, 1, CURRENT_TIMESTAMP)
-      ON CONFLICT (pokemon_id) DO UPDATE SET
-        losses = pokemon_votes.losses + 1,
-        total_votes = pokemon_votes.total_votes + 1,
-        updated_at = CURRENT_TIMESTAMP
-    `;
+    // Execute both updates in parallel for better performance
+    await Promise.all([
+      // Update winner (use UPSERT to handle missing records)
+      sql`
+        INSERT INTO pokemon_votes (pokemon_id, wins, losses, total_votes, updated_at)
+        VALUES (${winnerId}, 1, 0, 1, CURRENT_TIMESTAMP)
+        ON CONFLICT (pokemon_id) DO UPDATE SET
+          wins = pokemon_votes.wins + 1,
+          total_votes = pokemon_votes.total_votes + 1,
+          updated_at = CURRENT_TIMESTAMP
+      `,
+      // Update loser (use UPSERT to handle missing records)
+      sql`
+        INSERT INTO pokemon_votes (pokemon_id, wins, losses, total_votes, updated_at)
+        VALUES (${loserId}, 0, 1, 1, CURRENT_TIMESTAMP)
+        ON CONFLICT (pokemon_id) DO UPDATE SET
+          losses = pokemon_votes.losses + 1,
+          total_votes = pokemon_votes.total_votes + 1,
+          updated_at = CURRENT_TIMESTAMP
+      `
+    ]);
 
     console.log(`Vote recorded: Pokemon ${winnerId} beat Pokemon ${loserId}`);
   } catch (error) {
     console.error('Error recording vote:', error);
-
-
-
-
     throw error;
   }
 }

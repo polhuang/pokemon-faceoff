@@ -47,10 +47,8 @@ export default function VotePage() {
       setHasVoted(true);
       await submitVote(winnerId, loserId);
 
-      // Auto-load new pair after a short delay
-      setTimeout(() => {
-        loadNewPair();
-      }, 2000);
+      // Auto-load new pair immediately
+      loadNewPair();
     } catch (err) {
       setError('Failed to submit vote');
       setHasVoted(false);
