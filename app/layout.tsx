@@ -15,9 +15,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen">
-        <main className="container mx-auto px-4 py-8">
-          {children}
-        </main>
+        <PostHogProvider>
+          <main className="container mx-auto px-4 py-8">
+            {children}
+          </main>
+        </PostHogProvider>
       </body>
     </html>
   )

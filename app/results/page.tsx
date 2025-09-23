@@ -5,6 +5,7 @@ import { Pokemon } from '@/types/pokemon';
 import { fetchRankedResults, calculateWinRate } from '@/lib/api';
 import Link from 'next/link';
 import { Trophy, Medal, Award, ArrowLeft } from 'lucide-react';
+import { posthog } from '@/lib/posthog';
 
 export default function ResultsPage() {
   const [rankedPokemon, setRankedPokemon] = useState<Pokemon[]>([]);
@@ -13,6 +14,7 @@ export default function ResultsPage() {
 
   useEffect(() => {
     loadRankedResults();
+    posthog.capture('results_page_viewed');
   }, []);
 
   const loadRankedResults = async () => {

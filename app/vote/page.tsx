@@ -6,6 +6,7 @@ import { fetchPokemonData, submitVote, getRandomPokemonPair } from '@/lib/api';
 import PokemonCard from '@/components/PokemonCard';
 import Link from 'next/link';
 import { Trophy, BarChart3 } from 'lucide-react';
+import { posthog } from '@/lib/posthog';
 
 export default function VotePage() {
   const [pokemonPair, setPokemonPair] = useState<[Pokemon, Pokemon] | null>(null);
@@ -16,6 +17,7 @@ export default function VotePage() {
 
   useEffect(() => {
     loadPokemonData();
+    posthog.capture('vote_page_viewed');
   }, []);
 
   const loadPokemonData = async () => {
@@ -40,11 +42,29 @@ export default function VotePage() {
     const pair = getRandomPokemonPair(pokemon);
     setPokemonPair(pair);
     setHasVoted(false);
+
+    posthog.capture('pokemon_pair_loaded', {
+      pokemon1_id: pair[0].id,
+      pokemon1_name: pair[0].name,
+      pokemon2_id: pair[1].id,
+      pokemon2_name: pair[1].name,
+    });
   };
 
   const handleVote = async (winnerId: number, loserId: number) => {
     try {
       setHasVoted(true);
+
+      const winner = pokemonPair?.find(p => p.id === winnerId);
+      const loser = pokemonPair?.find(p => p.id === loserId);
+
+      posthog.capture('pokemon_vote_submitted', {
+        winner_id: winnerId,
+        winner_name: winner?.name,
+        loser_id: loserId,
+        loser_name: loser?.name,
+      });
+
       await submitVote(winnerId, loserId);
 
       // Auto-load new pair immediately
